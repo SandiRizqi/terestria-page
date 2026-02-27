@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy — Terestria</title>
+  <meta name="description" content="Privacy policy for the Terestria Mobile Mapping application. Information on how GPS, camera, notifications, and background process permissions are used." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --green-900: #1b5e20;
+      --green-800: #2e7d32;
+      --green-700: #388e3c;
+      --green-600: #43a047;
+      --green-500: #4caf50;
+      --green-400: #66bb6a;
+      --green-100: #e8f5e9;
+      --green-50:  #f1f8f1;
+      --white: #ffffff;
+      --bg: #f6faf6;
+      --border: #e0ece0;
+      --text: #1a2e1a;
+      --text-mid: #3d5a3d;
+      --text-muted: #6b8f6b;
+      --text-light: #9ab89a;
+      --shadow-md: 0 4px 24px rgba(46,125,50,0.12);
+      --font: 'Plus Jakarta Sans', sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 16px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ─── NAV ─────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; height: 64px;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+
+    .nav-logo-fallback {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: var(--green-800);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .nav-logo-fallback svg { width: 20px; height: 20px; }
+
+    .nav-brand { font-weight: 800; font-size: 18px; color: var(--text); }
+    .nav-brand em { color: var(--green-700); font-style: normal; }
+
+    .nav-back {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 14px; font-weight: 600;
+      color: var(--text-muted); text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--green-700); }
+
+    /* ─── PAGE HEADER ─────────────────────────── */
+    .page-header {
+      padding: 120px 0 64px;
+      background: linear-gradient(135deg, var(--green-800) 0%, var(--green-900) 100%);
+      position: relative; overflow: hidden;
+    }
+    .page-header::after {
+      content: ''; position: absolute; bottom: -80px; right: -80px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(76,175,80,0.2) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .page-header-inner {
+      max-width: 1100px; margin: 0 auto;
+      padding: 0 48px; position: relative; z-index: 2;
+    }
+
+    .page-eyebrow {
+      font-size: 12px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: rgba(255,255,255,0.65); margin-bottom: 16px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .page-eyebrow::before {
+      content: ''; width: 24px; height: 2px;
+      background: rgba(255,255,255,0.4); border-radius: 2px;
+    }
+
+    .page-header h1 {
+      font-size: clamp(36px, 5vw, 60px);
+      font-weight: 800; color: #fff;
+      letter-spacing: -0.03em; line-height: 1.05;
+      margin-bottom: 16px;
+    }
+    .page-header h1 em { color: var(--green-400); font-style: normal; }
+
+    .page-header p {
+      font-size: 16px; color: rgba(255,255,255,0.72);
+      max-width: 560px; line-height: 1.85; margin-bottom: 32px;
+    }
+
+    .page-meta { display: flex; gap: 12px; flex-wrap: wrap; }
+
+    .meta-chip {
+      font-family: var(--mono); font-size: 11px;
+      color: rgba(255,255,255,0.65);
+      background: rgba(255,255,255,0.1);
+      padding: 6px 14px; border-radius: 100px;
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+
+    /* ─── CONTENT LAYOUT ──────────────────────── */
+    .content-layout {
+      max-width: 1100px; margin: 0 auto; padding: 0 48px;
+      display: grid; grid-template-columns: 220px 1fr;
+      gap: 64px; align-items: start;
+    }
+
+    /* ─── TOC ─────────────────────────────────── */
+    .toc { position: sticky; top: 80px; padding: 48px 0; }
+
+    .toc-label {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--text-light); margin-bottom: 16px;
+    }
+
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+
+    .toc-list a {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 13px; font-weight: 500;
+      color: var(--text-muted); text-decoration: none;
+      padding: 7px 12px; border-radius: 8px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .toc-list a:hover { background: var(--green-100); color: var(--green-800); }
+    .toc-list a::before {
+      content: ''; width: 5px; height: 5px;
+      border-radius: 50%; background: var(--green-400); flex-shrink: 0;
+    }
+
+    /* ─── ARTICLE ─────────────────────────────── */
+    article { padding: 48px 0 80px; }
+
+    .section-block { margin-bottom: 64px; }
+    .section-block:last-child { margin-bottom: 0; }
+
+    .anchor { display: block; visibility: hidden; position: relative; top: -90px; }
+
+    .block-head { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 24px; }
+
+    .block-icon {
+      width: 52px; height: 52px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; flex-shrink: 0;
+      border: 1.5px solid var(--border);
+    }
+    .bg-green  { background: var(--green-100); border-color: #c8e6c9; }
+    .bg-blue   { background: #e3f2fd; border-color: #bbdefb; }
+    .bg-orange { background: #fff3e0; border-color: #ffe0b2; }
+    .bg-purple { background: #f3e5f5; border-color: #e1bee7; }
+    .bg-yellow { background: #fffde7; border-color: #fff9c4; }
+    .bg-red    { background: #fce4ec; border-color: #f8bbd0; }
+    .bg-teal   { background: #e0f2f1; border-color: #b2dfdb; }
+    .bg-gray   { background: #f5f5f5; border-color: #e0e0e0; }
+
+    .block-head-text h2 {
+      font-size: 22px; font-weight: 800; color: var(--text);
+      margin-bottom: 2px; letter-spacing: -0.01em;
+    }
+    .block-head-text .sub {
+      font-family: var(--mono); font-size: 11px;
+      color: var(--text-light); letter-spacing: 0.04em;
+    }
+
+    .prose { font-size: 15px; color: var(--text-muted); line-height: 1.9; }
+    .prose p { margin-bottom: 14px; }
+    .prose p:last-child { margin-bottom: 0; }
+    .prose strong { color: var(--text-mid); font-weight: 600; }
+
+    hr { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+
+    /* ─── PERMISSION CARD ─────────────────────── */
+    .perm-card {
+      background: var(--white); border: 1.5px solid var(--border);
+      border-radius: 14px; overflow: hidden; margin: 20px 0;
+      transition: border-color 0.2s;
+    }
+    .perm-card:hover { border-color: var(--green-400); }
+
+    .perm-head {
+      display: flex; align-items: center; gap: 12px;
+      padding: 16px 20px; border-bottom: 1px solid var(--border);
+      background: var(--green-50);
+    }
+    .perm-emoji { font-size: 20px; }
+    .perm-name { font-size: 15px; font-weight: 700; color: var(--text); flex: 1; }
+
+    .perm-badge {
+      font-size: 11px; font-weight: 700;
+      padding: 4px 10px; border-radius: 100px;
+    }
+    .badge-required { background: var(--green-100); color: var(--green-800); }
+    .badge-optional { background: #f5f5f5; color: #757575; }
+
+    .perm-body { padding: 18px 20px; }
+    .perm-desc { font-size: 14px; color: var(--text-muted); line-height: 1.8; margin-bottom: 14px; }
+
+    .perm-rows { display: flex; flex-direction: column; gap: 6px; }
+    .perm-row { display: flex; gap: 10px; font-size: 13px; }
+    .perm-key { font-weight: 600; color: var(--text-mid); min-width: 120px; flex-shrink: 0; }
+    .perm-val { color: var(--text-muted); }
+
+    /* ─── HIGHLIGHT BOXES ─────────────────────── */
+    .highlight {
+      background: var(--green-50); border: 1.5px solid #c8e6c9;
+      border-radius: 12px; padding: 20px 24px; margin: 20px 0;
+    }
+    .highlight.warning { background: #fff8e1; border-color: #ffe082; }
+    .highlight.info    { background: #e3f2fd; border-color: #bbdefb; }
+
+    .highlight h4 { font-size: 15px; font-weight: 700; color: var(--green-800); margin-bottom: 6px; }
+    .highlight.warning h4 { color: #e65100; }
+    .highlight.info h4    { color: #1565c0; }
+
+    .highlight p { font-size: 14px; color: var(--text-muted); line-height: 1.8; }
+
+    /* ─── CONTACT CARD ────────────────────────── */
+    .contact-card {
+      background: var(--white); border: 1.5px solid var(--border);
+      border-radius: 16px; padding: 36px; text-align: center; margin-top: 20px;
+    }
+    .contact-card h3 { font-size: 20px; font-weight: 800; color: var(--text); margin-bottom: 10px; }
+    .contact-card p {
+      font-size: 14px; color: var(--text-muted); margin-bottom: 24px;
+      max-width: 400px; margin-left: auto; margin-right: auto; line-height: 1.7;
+    }
+
+    .btn-contact {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 14px; font-weight: 700;
+      color: var(--white); background: var(--green-700);
+      padding: 12px 28px; border-radius: 10px;
+      text-decoration: none; transition: background 0.2s;
+      box-shadow: 0 4px 16px rgba(46,125,50,0.25);
+    }
+    .btn-contact:hover { background: var(--green-800); }
+
+    /* ─── FOOTER ──────────────────────────────── */
+    footer {
+      background: var(--white); border-top: 1px solid var(--border); padding: 40px 48px;
+    }
+    .footer-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-brand { font-size: 18px; font-weight: 800; color: var(--text); }
+    .footer-brand em { color: var(--green-700); font-style: normal; }
+    .footer-sub { font-size: 12px; color: var(--text-light); margin-top: 4px; }
+    .footer-link {
+      font-size: 13px; font-weight: 500;
+      color: var(--text-muted); text-decoration: none; transition: color 0.2s;
+    }
+    .footer-link:hover { color: var(--green-700); }
+
+    /* ─── RESPONSIVE ──────────────────────────── */
+    @media (max-width: 860px) {
+      nav { padding: 0 24px; }
+      .page-header-inner { padding: 0 24px; }
+      .content-layout { grid-template-columns: 1fr; padding: 0 24px; gap: 0; }
+      .toc { display: none; }
+      article { padding: 40px 0 60px; }
+      footer { padding: 32px 24px; }
+      .footer-inner { flex-direction: column; gap: 20px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">
+    <div class="nav-logo-fallback">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="1.5"/>
+        <circle cx="12" cy="9" r="2.5" fill="rgba(255,255,255,0.9)"/>
+      </svg>
+    </div>
+    <span class="nav-brand">Terestria<em>.</em></span>
+  </a>
+  <a class="nav-back" href="index.html">← Back to Home</a>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-eyebrow">Legal &amp; Privacy</div>
+    <h1>Privacy <em>Policy</em></h1>
+    <p>Terestria is committed to protecting user privacy. This document transparently explains how the application uses device permissions and how data is handled during field survey activities.</p>
+    <div class="page-meta">
+      <span class="meta-chip">Effective: January 1, 2025</span>
+      <span class="meta-chip">Updated: June 1, 2025</span>
+      <span class="meta-chip">Version 1.2.0</span>
+      <span class="meta-chip">Terestria Mobile Mapping</span>
+    </div>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="content-layout">
+
+  <!-- TOC -->
+  <aside class="toc">
+    <div class="toc-label">Table of Contents</div>
+    <ul class="toc-list">
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#gps">Location &amp; GPS</a></li>
+      <li><a href="#background">Background Process</a></li>
+      <li><a href="#notification">Notifications</a></li>
+      <li><a href="#camera">Camera &amp; Media</a></li>
+      <li><a href="#storage">Local Storage</a></li>
+      <li><a href="#server">Upload to Server</a></li>
+      <li><a href="#thirdparty">Third Parties</a></li>
+      <li><a href="#rights">User Rights</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </aside>
+
+  <!-- ARTICLE -->
+  <article>
+
+    <!-- 1. OVERVIEW -->
+    <div class="section-block">
+      <span class="anchor" id="overview"></span>
+      <div class="block-head">
+        <div class="block-icon bg-green">📋</div>
+        <div class="block-head-text">
+          <h2>Overview</h2>
+          <span class="sub">About This Policy</span>
+        </div>
+      </div>
+      <div class="prose">
+        <p>Terestria is a professional mobile mapping application designed for field geospatial data collection — specifically for agricultural, environmental, and land survey needs. It is developed for specialized use with no advertising or commercial subscription model.</p>
+        <p>This policy explains every permission requested, the technical reason it is needed, and how data is managed and used. By using Terestria, you agree to the terms described in this document.</p>
+      </div>
+      <div class="highlight">
+        <h4>✅ Our Core Privacy Principles</h4>
+        <p>Terestria does not collect analytics data, does not display ads, and does not sell or share user data with third parties for commercial purposes. <strong>All data collected during field surveys is stored exclusively on your device</strong> and is only transmitted to a server when you explicitly choose to push data.</p>
+      </div>
+    </div>
+
+    <hr />
+
+    <!-- 2. GPS -->
+    <div class="section-block">
+      <span class="anchor" id="gps"></span>
+      <div class="block-head">
+        <div class="block-icon bg-blue">📡</div>
+        <div class="block-head-text">
+          <h2>Location &amp; GPS</h2>
+          <span class="sub">ACCESS_FINE_LOCATION · ACCESS_COARSE_LOCATION · BLUETOOTH</span>
+        </div>
+      </div>
+      <div class="prose">
+        <p>Access to device location is the core of Terestria's functionality as a field mapping application.</p>
+      </div>
+
+      <div class="perm-card">
+        <div class="perm-head">
+          <span class="perm-emoji">📍</span>
+          <span class="perm-name">Precise Location (Fine Location)</span>
+          <span class="perm-badge badge-required">Required</span>
+        </div>
+        <div class="perm-body">
+          <p class="perm-desc">Required to display the user's position on the map and record coordinates for survey points, lines, and polygons. Without this permission the app's core functionality cannot operate.</p>
+          <div class="perm-rows">
+            <div class="perm-row"><span class="perm-key">Used for</span><span class="perm-val">Map navigation, GPS point digitizing, track recording, photo geotagging</span></div>
+            <div class="perm-row"><span class="perm-key">When active</span><span class="perm-val">During active mapping sessions</span></div>
+            <div class="perm-row"><span class="perm-key">Data storage</span><span class="perm-val">Coordinates saved locally on device only, never sent automatically</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="perm-card">
+        <div class="perm-head">
+          <span class="perm-emoji">🛰️</span>
+          <span class="perm-name">External RTK GPS via TCP/IP (Emlid &amp; compatible receivers)</span>
+          <span class="perm-badge badge-optional">Optional</span>
+        </div>
+        <div class="perm-body">
+          <p class="perm-desc">Terestria supports connection to geodetic RTK GPS receivers via TCP/IP network for sub-centimeter position accuracy. The connection is established through the GPS device's WiFi hotspot.</p>
+          <div class="perm-rows">
+            <div class="perm-row"><span class="perm-key">Triggered by</span><span class="perm-val">User selecting "RTK GPS" as the location provider</span></div>
+            <div class="perm-row"><span class="perm-key">Data received</span><span class="perm-val">NMEA / LLH (Lat/Lon/Height) stream from the receiver</span></div>
+            <div class="perm-row"><span class="perm-key">Data storage</span><span class="perm-val">RTK coordinates saved locally on device only</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="highlight info">
+        <h4>🔒 Location Data Stays on Your Device</h4>
+        <p>All location data — whether from the phone's built-in GPS or an external RTK receiver — is <strong>stored exclusively on your device</strong>. It is never transmitted automatically. Coordinates are only sent to a server if you explicitly perform a manual data push (see <a href="#server" style="color:var(--green-700);">Upload to Server</a>).</p>
+      </div>
+    </div>
+
+    <hr />
+
+    <!-- 3. BACKGROUND -->
+    <div class="section-block">
+      <span class="anchor" id="background"></span>
+      <div class="block-head">
+        <div class="block-icon bg-orange">⚙️</div>
+        <div class="block-head-text">
+          <h2>Background Process</h2>
+          <span class="sub">FOREGROUND_SERVICE · ACCESS_BACKGROUND_LOCATION</span>
+        </div>
+      </div>
+
+      <div class="perm-card">
+        <div class="perm-head">
+          <span class="perm-emoji">🔄</span>
+          <span class="perm-name">Background Location Tracking</span>
+          <span class="perm-badge badge-optional">Optional</span>
+        </div>
+        <div class="perm-body">
+          <p class="perm-desc">When track recording is enabled, the app needs to continuously log GPS position even when not in the foreground. This allows surveyors to move across an area while the track is accurately recorded.</p>
+          <div class="perm-rows">
+            <div class="perm-row"><span class="perm-key">When active</span><span class="perm-val">Only when user activates "Track Recording"</span></div>
+            <div class="perm-row"><span class="perm-key">Notification</span><span class="perm-val">A persistent notification is always shown while tracking is running</span></div>
+            <div class="perm-row"><span class="perm-key">User control</span><span class="perm-val">Can be stopped at any time from the notification or app menu</span></div>
+            <div class="perm-row"><span class="perm-key">Data storage</span><span class="perm-val">Track data saved locally on device only</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="perm-card">
+        <div class="perm-head">
+          <span class="perm-emoji">📤</span>
+          <span class="perm-name">Background Upload</span>
+          <span class="perm-badge badge-optional">Optional</span>
+        </div>
+        <div class="perm-body">
+          <p class="perm-desc">When the user initiates a data push, the upload process (including large photo files) can continue in the background so it is not interrupted if the user switches to another app.</p>
+          <div class="perm-rows">
+            <div class="perm-row"><span class="perm-key">When active</span><span class="perm-val">Only during an upload process initiated by the user</span></div>
+            <div class="perm-row"><span class="perm-key">Notification</span><span class="perm-val">Upload progress is displayed in the notification bar</span></div>
+            <div class="perm-row"><span class="perm-key">Data sent</span><span class="perm-val">Only the project data selected by the user for upload</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="highlight warning">
+        <h4>⚠️ No Hidden Background Activity</h4>
+        <p>Terestria never runs background processes without the user's knowledge. Every background process is always accompanied by a visible notification and can be stopped at any time.</p>
+      </div>
+    </div>
+
+    <hr />
+
+    <!-- 4. NOTIFICATION -->
+    <div class="section-block">
+      <span class="anchor" id="notification"></span>
+      <div class="block-head">
+        <div class="block-icon bg-yellow">🔔</div>
+        <div class="block-head-text">
+          <h2>Notifications</h2>
+          <span class="sub">POST_NOTIFICATIONS</span>
+        </div>
+      </div>
+
+      <div class="perm-card">
+        <div class="perm-head">
+          <span class="perm-emoji">🔔</span>
+          <span class="perm-name">System Notifications</span>
+          <span class="perm-badge badge-required">Required for Background</span>
+        </div>
+        <div class="perm-body">
+          <p class="perm-desc">Used to display the status of background services, upload progress, and important conditions such as GPS signal loss or sync completion.</p>
+          <div class="perm-rows">
+            <div class="perm-row"><span class="perm-key">Types shown</span><span class="perm-val">Active tracking status, upload progress, connection errors</span></div>
+            <div class="perm-row"><span class="perm-key">Promotional notifications</span><span class="perm-val">None — never sent</span></div>
+            <div class="perm-row"><span class="perm-key">Third-party notifications</span><span class="perm-val">None — never sent</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="prose">
+        <p>Terestria <strong>does not send marketing, promotional, usage-reminder, or any irrelevant notifications</strong>. Notifications only appear when there is an active process that requires the user's awareness.</p>
+      </div>
+    </div>
+
+    <hr />
+
+    <!-- 5. CAMERA -->
+    <div class="section-block">
+      <span class="anchor" id="camera"></span>
+      <div class="block-head">
+        <div class="block-icon bg-purple">📸</div>
+        <div class="block-head-text">
+          <h2>Camera &amp; Media</h2>
+          <span class="sub">CAMERA · READ_MEDIA_IMAGES</span>
+        </div>
+      </div>
+
+      <div class="perm-card">
+        <div class="perm-head">
+          <span class="perm-emoji">📷</span>
+          <span class="perm-name">Camera Access</span>
+          <span class="perm-badge badge-required">Required for Photos</span>
+        </div>
+        <div class="perm-body">
+          <p class="perm-desc">Allows the user to take field photos that are automatically attached to the active map feature, complete with GPS coordinates and a timestamp.</p>
+          <div class="perm-rows">
+            <div class="perm-row"><span class="perm-key">Triggered by</span><span class="perm-val">Explicit user action (tap the take photo button)</span></div>
+            <div class="perm-row"><span class="perm-key">Photo metadata</span><span class="perm-val">GPS coordinates, timestamp, linked feature ID</span></div>
+            <div class="perm-row"><span class="perm-key">Data storage</span><span class="perm-val">Saved locally on device in the project folder only</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="perm-card">
+        <div class="perm-head">
+          <span class="perm-emoji">🖼️</span>
+          <span class="perm-name">Gallery / Media Access</span>
+          <span class="perm-badge badge-optional">Optional</span>
+        </div>
+        <div class="perm-body">
+          <p class="perm-desc">Users can choose existing photos from the gallery to attach to a map feature. This permission is only used when the user explicitly selects "Choose from Gallery".</p>
+          <div class="perm-rows">
+            <div class="perm-row"><span class="perm-key">Gallery access scope</span><span class="perm-val">Only the specific file chosen by the user, not the full gallery</span></div>
+            <div class="perm-row"><span class="perm-key">Data storage</span><span class="perm-val">Selected photo copied to the project folder on device only</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="highlight info">
+        <h4>🔒 Photos Stay on Your Device</h4>
+        <p>The app <strong>does not scan, read, or access the photo gallery</strong> without direct user action. Photos are never uploaded to a server without the user's explicit consent during a manual data push.</p>
+      </div>
+    </div>
+
+    <hr />
+
+    <!-- 6. LOCAL STORAGE -->
+    <div class="section-block">
+      <span class="anchor" id="storage"></span>
+      <div class="block-head">
+        <div class="block-icon bg-teal">💾</div>
+        <div class="block-head-text">
+          <h2>Local Data Storage</h2>
+          <span class="sub">Offline-First by Design</span>
+        </div>
+      </div>
+      <div class="prose">
+        <p>All survey data is stored locally on the user's device. Terestria operates in <strong>offline-first</strong> mode — all core functions work without an internet connection.</p>
+        <p>Data stored locally includes: spatial geometry (point, line, polygon coordinates), attribute form values, field photos, project and layer configurations, basemap tiles cached for offline use, and NMEA logs from external GPS receivers (if enabled).</p>
+      </div>
+      <div class="highlight">
+        <h4>🔒 All Data Remains on Your Device Until You Push It</h4>
+        <p>Every piece of data collected through Terestria — coordinates, attributes, photos, tracks — is <strong>stored exclusively on your device</strong>. None of this data leaves your device automatically or silently. The only time any data is transmitted is when you manually initiate an upload through the "Push Data" action (described in the next section). Local data can be deleted at any time via the project management menu.</p>
+      </div>
+    </div>
+
+    <hr />
+
+    <!-- 7. SERVER UPLOAD -->
+    <div class="section-block">
+      <span class="anchor" id="server"></span>
+      <div class="block-head">
+        <div class="block-icon bg-blue">☁️</div>
+        <div class="block-head-text">
+          <h2>Upload to Server</h2>
+          <span class="sub">The Only Time Data Leaves Your Device</span>
+        </div>
+      </div>
+      <div class="prose">
+        <p>Terestria uses a <strong>manual push model</strong>. This is the <strong>only action that transmits data from your device to a server</strong>. No data is ever sent automatically in the background without your explicit action.</p>
+        <p>When you choose to push data, the application transmits the selected project's data — including geometry, attributes, and photos — to the server configured in the project settings. All transmissions use encrypted HTTPS connections.</p>
+        <p>The destination server is configured by the project administrator, not by Terestria itself. Terestria as an application <strong>does not store a copy of your survey data on the developer's server</strong>. Data flows only from your device to the server defined in your project configuration.</p>
+        <p>You have full visibility and control: you choose which project to push, review what will be sent, and confirm before any data leaves your device.</p>
+      </div>
+      <div class="highlight warning">
+        <h4>⚠️ Important: Server Responsibility</h4>
+        <p>The destination server is managed by your organization or project administrator. Please ensure the target server meets your organization's data security and compliance requirements. Terestria is not responsible for the security practices of third-party servers.</p>
+      </div>
+    </div>
+
+    <hr />
+
+    <!-- 8. THIRD PARTY -->
+    <div class="section-block">
+      <span class="anchor" id="thirdparty"></span>
+      <div class="block-head">
+        <div class="block-icon bg-gray">🔗</div>
+        <div class="block-head-text">
+          <h2>Third Parties</h2>
+          <span class="sub">SDKs &amp; External Services</span>
+        </div>
+      </div>
+      <div class="prose">
+        <p>Terestria is designed to minimize dependency on third-party services. The app <strong>does not integrate analytics SDKs, advertising networks, or behavioral tracking tools</strong> of any kind.</p>
+        <p>Open-source mapping libraries are used for map rendering and offline GIS operations. These libraries do not transmit user data to their developers' servers.</p>
+        <p>If a paid TMS/WMS basemap provider is configured (such as Mapbox), tile requests will pass through that provider's servers in accordance with their terms of service. Users are responsible for the choice of basemap provider in their project configuration.</p>
+      </div>
+    </div>
+
+    <hr />
+
+    <!-- 9. USER RIGHTS -->
+    <div class="section-block">
+      <span class="anchor" id="rights"></span>
+      <div class="block-head">
+        <div class="block-icon bg-green">⚖️</div>
+        <div class="block-head-text">
+          <h2>User Rights</h2>
+          <span class="sub">Full Control Over Your Data</span>
+        </div>
+      </div>
+      <div class="prose">
+        <p>Terestria users have full control over the data they collect, including the right to view all survey data stored on their device, delete any project and all its associated data at any time, revoke app permissions through system settings, stop any active tracking or upload process at any time, and request deletion of account credentials and any server-side data.</p>
+        <p>Permissions can be revoked at any time through <strong>Settings → Apps → Terestria → Permissions</strong> on your Android device. Revoking a specific permission disables the related feature but does not delete data already stored locally.</p>
+      </div>
+    </div>
+
+    <hr />
+
+    <!-- 10. CONTACT -->
+    <div class="section-block">
+      <span class="anchor" id="contact"></span>
+      <div class="block-head">
+        <div class="block-icon bg-red">📬</div>
+        <div class="block-head-text">
+          <h2>Contact &amp; Questions</h2>
+          <span class="sub">Get in Touch</span>
+        </div>
+      </div>
+      <div class="prose">
+        <p>If you have questions about this privacy policy or wish to make a request regarding your data, please contact us.</p>
+      </div>
+      <div class="contact-card">
+        <h3>Questions About Privacy?</h3>
+        <p>We are committed to responding to privacy-related inquiries within 5 business days. The same contact can be used to submit an access request for the application.</p>
+        <a href="mailto:a.sandi.rizqi@gmail.com" class="btn-contact">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Contact Us
+        </a>
+      </div>
+      <div class="prose" style="margin-top:20px;">
+        <p style="font-size:13px;">This privacy policy may be updated at any time. Registered users will receive an in-app notification when significant changes are made. The latest version is always available on this page.</p>
+      </div>
+    </div>
+
+  </article>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">Terestria<em>.</em></div>
+      <div class="footer-sub">Privacy Policy v1.2.0 · © 2025 Terestria</div>
+    </div>
+    <a class="footer-link" href="index.html">← Back to Home</a>
+  </div>
+</footer>
+
+</body>
+</html>

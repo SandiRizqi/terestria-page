@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terestria — Agricultural & Environmental Mapping</title>
+  <meta name="description" content="Professional mobile GIS application for field geospatial data collection. Point, Line, Polygon, Photos, and Attributes for agricultural and environmental surveys." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --green-900: #1b5e20;
+      --green-800: #2e7d32;
+      --green-700: #388e3c;
+      --green-600: #43a047;
+      --green-500: #4caf50;
+      --green-400: #66bb6a;
+      --green-100: #e8f5e9;
+      --green-50:  #f1f8f1;
+      --white: #ffffff;
+      --bg: #f6faf6;
+      --surface: #ffffff;
+      --border: #e0ece0;
+      --text: #1a2e1a;
+      --text-mid: #3d5a3d;
+      --text-muted: #6b8f6b;
+      --text-light: #9ab89a;
+      --shadow-sm: 0 1px 4px rgba(46,125,50,0.08);
+      --shadow-md: 0 4px 24px rgba(46,125,50,0.12);
+      --shadow-lg: 0 12px 48px rgba(46,125,50,0.16);
+      --font: 'Plus Jakarta Sans', sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 16px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ─── NAV ─────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 64px;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .nav-logo-fallback {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      background: var(--green-800);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-logo-fallback svg { width: 20px; height: 20px; }
+
+    .nav-brand { font-weight: 800; font-size: 18px; color: var(--text); }
+    .nav-brand em { color: var(--green-700); font-style: normal; }
+
+    nav ul { display: flex; align-items: center; gap: 36px; list-style: none; }
+
+    nav ul a {
+      font-size: 14px; font-weight: 500;
+      color: var(--text-muted); text-decoration: none;
+      transition: color 0.2s;
+    }
+    nav ul a:hover { color: var(--green-700); }
+
+    .btn-nav {
+      font-size: 13px; font-weight: 700;
+      color: var(--white) !important;
+      background: var(--green-700);
+      padding: 8px 20px; border-radius: 8px;
+      text-decoration: none; transition: background 0.2s;
+    }
+    .btn-nav:hover { background: var(--green-800) !important; }
+
+    /* ─── HERO ─────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding-top: 64px;
+      overflow: hidden;
+    }
+
+    .hero-left { padding: 80px 64px 80px 80px; }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--green-100);
+      color: var(--green-800);
+      font-size: 12px; font-weight: 600;
+      padding: 6px 14px; border-radius: 100px;
+      margin-bottom: 28px; letter-spacing: 0.02em;
+    }
+
+    .hero-badge-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%; background: var(--green-500);
+      animation: pulse-dot 2s infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.4); }
+    }
+
+    .hero h1 {
+      font-size: clamp(40px, 5vw, 68px);
+      font-weight: 800; line-height: 1.05;
+      letter-spacing: -0.03em; color: var(--text);
+      margin-bottom: 8px;
+    }
+    .hero h1 .highlight { color: var(--green-700); }
+
+    .hero-sub {
+      font-family: var(--mono); font-size: 13px;
+      color: var(--text-light); margin-bottom: 24px;
+      letter-spacing: 0.05em;
+    }
+
+    .hero p {
+      font-size: 17px; color: var(--text-muted);
+      max-width: 460px; margin-bottom: 44px;
+      font-weight: 400; line-height: 1.8;
+    }
+
+    .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 14px; font-weight: 700;
+      color: var(--white); background: var(--green-700);
+      padding: 13px 28px; border-radius: 10px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 16px rgba(46,125,50,0.3);
+    }
+    .btn-primary:hover {
+      background: var(--green-800); transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(46,125,50,0.35);
+    }
+
+    .btn-outline {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 14px; font-weight: 600;
+      color: var(--green-700); background: transparent;
+      padding: 13px 28px; border-radius: 10px;
+      text-decoration: none;
+      border: 1.5px solid var(--green-400);
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .btn-outline:hover { background: var(--green-100); border-color: var(--green-600); }
+
+    /* ─── HERO RIGHT ──────────────────────────── */
+    .hero-right {
+      position: relative;
+      background: linear-gradient(135deg, var(--green-800) 0%, var(--green-900) 100%);
+      height: 100%; min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+
+    .hero-right::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        radial-gradient(circle at 30% 40%, rgba(255,255,255,0.04) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255,255,255,0.03) 0%, transparent 50%);
+    }
+
+    .hero-right::after {
+      content: '';
+      position: absolute; bottom: -100px; right: -100px;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(76,175,80,0.15) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .phone-hero-wrap {
+      position: relative; z-index: 2;
+      display: flex; align-items: flex-end; justify-content: center;
+      gap: 14px; padding: 48px 24px;
+    }
+
+    /* ─── PHONE MOCKUP ────────────────────────── */
+    .phone { position: relative; width: 160px; flex-shrink: 0; }
+
+    .phone-frame {
+      position: relative; width: 100%;
+      border-radius: 32px; overflow: hidden;
+      box-shadow:
+        0 0 0 8px #1a1a1a,
+        0 0 0 10px #2a2a2a,
+        0 32px 64px rgba(0,0,0,0.5);
+      background: #1a1a1a;
+    }
+
+    .phone-frame::before {
+      content: '';
+      position: absolute; top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 80px; height: 22px;
+      background: #1a1a1a;
+      border-radius: 0 0 16px 16px;
+      z-index: 10;
+    }
+
+    .phone-screen {
+      width: 100%; aspect-ratio: 9/19.5;
+      object-fit: cover; object-position: top;
+      display: block;
+    }
+
+    .phone.hero-main { width: 200px; transform: translateY(-24px); z-index: 3; }
+    .phone.hero-side { opacity: 0.82; z-index: 2; width: 160px; }
+    .phone.hero-far  { opacity: 0.52; z-index: 1; width: 138px; }
+
+    /* ─── STATS ───────────────────────────────── */
+    .stats { background: var(--white); border-bottom: 1px solid var(--border); }
+
+    .stats-inner {
+      max-width: 1100px; margin: 0 auto; padding: 0 48px;
+      display: grid; grid-template-columns: repeat(4, 1fr);
+    }
+
+    .stat {
+      padding: 36px 32px;
+      border-right: 1px solid var(--border);
+      text-align: center;
+    }
+    .stat:last-child { border-right: none; }
+
+    .stat-val {
+      font-size: 36px; font-weight: 800;
+      color: var(--green-700); letter-spacing: -0.03em;
+      line-height: 1; margin-bottom: 6px;
+    }
+    .stat-label { font-size: 13px; color: var(--text-muted); font-weight: 500; }
+
+    /* ─── SECTIONS COMMON ─────────────────────── */
+    .section { padding: 96px 0; }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 48px; }
+
+    .section-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 12px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--green-700); margin-bottom: 16px;
+    }
+    .section-eyebrow::before {
+      content: ''; width: 24px; height: 2px;
+      background: var(--green-500); border-radius: 2px;
+    }
+
+    .section-title {
+      font-size: clamp(28px, 3.5vw, 44px); font-weight: 800;
+      color: var(--text); letter-spacing: -0.025em;
+      line-height: 1.1; margin-bottom: 16px;
+    }
+    .section-title .accent { color: var(--green-700); }
+
+    .section-desc {
+      font-size: 16px; color: var(--text-muted);
+      max-width: 520px; line-height: 1.85;
+    }
+
+    /* ─── FEATURES ────────────────────────────── */
+    .features-section { background: var(--white); }
+
+    .features-header {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 64px; align-items: end; margin-bottom: 64px;
+    }
+
+    .features-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+    }
+
+    .feat-card {
+      background: var(--bg); border: 1.5px solid var(--border);
+      border-radius: 16px; padding: 32px 28px;
+      transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
+    }
+    .feat-card:hover {
+      border-color: var(--green-400);
+      box-shadow: var(--shadow-md); transform: translateY(-3px);
+    }
+
+    .feat-num { font-family: var(--mono); font-size: 10px; color: var(--text-light); margin-bottom: 20px; }
+
+    .feat-icon-wrap {
+      width: 52px; height: 52px; border-radius: 14px;
+      background: var(--green-100);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; margin-bottom: 20px;
+    }
+
+    .feat-title { font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 10px; }
+    .feat-desc  { font-size: 14px; color: var(--text-muted); line-height: 1.8; }
+
+    /* ─── SCREENSHOTS ─────────────────────────── */
+    .screenshots-section { background: var(--bg); overflow: hidden; }
+
+    .screenshots-header { text-align: center; margin-bottom: 64px; }
+    .screenshots-header .section-eyebrow { justify-content: center; }
+    .screenshots-header .section-desc { margin: 0 auto; }
+
+    .phones-row {
+      display: flex; gap: 24px;
+      justify-content: center; flex-wrap: wrap;
+      padding: 16px 48px 48px;
+    }
+
+    .phone-card { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+    .phone-card .phone-frame { width: 175px; }
+
+    .phone-caption { font-size: 13px; font-weight: 600; color: var(--text-muted); text-align: center; }
+    .phone-caption span { display: block; font-size: 11px; font-weight: 400; color: var(--text-light); margin-top: 3px; }
+
+    /* ─── FEATURE DETAIL ──────────────────────── */
+    .feature-detail { background: var(--white); }
+
+    .feature-row {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: center;
+      padding: 80px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .feature-row:last-child { border-bottom: none; }
+    .feature-row.reverse { direction: rtl; }
+    .feature-row.reverse > * { direction: ltr; }
+
+    .feature-row-text h3 {
+      font-size: 28px; font-weight: 800;
+      color: var(--text); letter-spacing: -0.02em;
+      margin-bottom: 14px;
+    }
+    .feature-row-text p {
+      font-size: 15px; color: var(--text-muted);
+      line-height: 1.85; margin-bottom: 24px;
+    }
+
+    .feature-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    .chip {
+      font-size: 12px; font-weight: 600;
+      color: var(--green-800); background: var(--green-100);
+      border: 1px solid var(--green-400);
+      border-radius: 100px; padding: 5px 14px;
+    }
+
+    .feature-row-phone {
+      display: flex; justify-content: center;
+      align-items: center; position: relative;
+    }
+    .feature-row-phone .phone-frame {
+      width: 240px;
+      box-shadow: 0 0 0 8px #1a1a1a, 0 0 0 10px #2a2a2a, var(--shadow-lg);
+    }
+    .feature-row-phone::before {
+      content: ''; position: absolute;
+      width: 340px; height: 340px;
+      border-radius: 50%; background: var(--green-100); z-index: -1;
+    }
+
+    /* ─── COLLABORATION ───────────────────────── */
+    .collab-section { background: var(--bg); }
+
+    .collab-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 20px; margin-top: 56px;
+    }
+
+    .collab-card {
+      background: var(--white); border: 1.5px solid var(--border);
+      border-radius: 16px; padding: 32px 28px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .collab-card:hover { border-color: #a5d6a7; box-shadow: var(--shadow-md); }
+    .collab-card.featured { border-color: var(--green-500); background: var(--green-50); }
+
+    .collab-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; margin-bottom: 18px;
+    }
+    .icon-green-bg  { background: var(--green-100); }
+    .icon-blue-bg   { background: #e3f2fd; }
+    .icon-orange-bg { background: #fff3e0; }
+    .icon-purple-bg { background: #f3e5f5; }
+
+    .collab-card h3 { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+    .collab-card p  { font-size: 14px; color: var(--text-muted); line-height: 1.8; }
+
+    /* ─── CREDENTIAL ──────────────────────────── */
+    .credential-section {
+      background: linear-gradient(135deg, var(--green-800) 0%, var(--green-900) 100%);
+      position: relative; overflow: hidden;
+    }
+    .credential-section::before {
+      content: ''; position: absolute; top: -200px; right: -200px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(76,175,80,0.15) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .credential-section::after {
+      content: ''; position: absolute; bottom: -150px; left: -100px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .credential-inner {
+      position: relative; z-index: 2;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: center;
+    }
+
+    .credential-text .section-eyebrow { color: rgba(255,255,255,0.7); }
+    .credential-text .section-eyebrow::before { background: rgba(255,255,255,0.5); }
+    .credential-text .section-title { color: #fff; }
+    .credential-text .section-desc { color: rgba(255,255,255,0.7); max-width: 440px; }
+
+    .credential-reasons { display: flex; flex-direction: column; gap: 16px; margin-top: 36px; }
+
+    .reason-item {
+      display: flex; align-items: flex-start; gap: 14px;
+      color: rgba(255,255,255,0.85); font-size: 15px;
+    }
+    .reason-icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: rgba(255,255,255,0.12);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0; margin-top: 2px;
+    }
+    .reason-item strong { display: block; color: #fff; font-weight: 700; margin-bottom: 2px; }
+
+    .credential-card {
+      background: var(--white); border-radius: 20px;
+      padding: 40px; box-shadow: 0 24px 64px rgba(0,0,0,0.25);
+    }
+    .credential-card h3 { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 8px; }
+    .credential-card > p { font-size: 14px; color: var(--text-muted); margin-bottom: 28px; line-height: 1.7; }
+
+    .info-block { display: flex; flex-direction: column; gap: 14px; margin-bottom: 28px; }
+    .info-line { display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--text-mid); }
+    .info-line-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green-500); flex-shrink: 0; }
+
+    .btn-full {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%; font-size: 15px; font-weight: 700;
+      color: var(--white); background: var(--green-700);
+      padding: 15px 28px; border-radius: 10px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 16px rgba(46,125,50,0.3);
+    }
+    .btn-full:hover {
+      background: var(--green-800); transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(46,125,50,0.4);
+    }
+
+    /* ─── FOOTER ──────────────────────────────── */
+    footer {
+      background: var(--white); border-top: 1px solid var(--border); padding: 48px;
+    }
+    .footer-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-brand { font-size: 20px; font-weight: 800; color: var(--text); }
+    .footer-brand em { color: var(--green-700); font-style: normal; }
+    .footer-sub { font-size: 12px; color: var(--text-light); margin-top: 4px; }
+    .footer-links { display: flex; gap: 32px; }
+    .footer-links a {
+      font-size: 13px; font-weight: 500;
+      color: var(--text-muted); text-decoration: none; transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--green-700); }
+
+    /* ─── RESPONSIVE ──────────────────────────── */
+    @media (max-width: 960px) {
+      nav { padding: 0 24px; }
+      nav ul { display: none; }
+      .hero { grid-template-columns: 1fr; min-height: auto; }
+      .hero-left { padding: 100px 24px 48px; }
+      .hero-right { min-height: 420px; order: -1; }
+      .phone-hero-wrap { padding: 28px 16px; }
+      .phone.hero-far { display: none; }
+      .stats-inner { grid-template-columns: repeat(2,1fr); padding: 0 24px; }
+      .container { padding: 0 24px; }
+      .features-header { grid-template-columns: 1fr; gap: 24px; }
+      .features-grid { grid-template-columns: 1fr 1fr; }
+      .phones-row { padding: 16px 24px 40px; gap: 16px; }
+      .phone-card .phone-frame { width: 145px; }
+      .feature-row { grid-template-columns: 1fr; gap: 40px; padding: 56px 0; }
+      .feature-row.reverse { direction: ltr; }
+      .feature-row-phone .phone-frame { width: 200px; }
+      .feature-row-phone::before { width: 280px; height: 280px; }
+      .collab-grid { grid-template-columns: 1fr; }
+      .credential-inner { grid-template-columns: 1fr; gap: 48px; }
+      footer { padding: 36px 24px; }
+      .footer-inner { flex-direction: column; gap: 24px; text-align: center; }
+      .footer-links { flex-wrap: wrap; justify-content: center; }
+    }
+
+    @media (max-width: 580px) {
+      .hero h1 { font-size: 38px; }
+      .features-grid { grid-template-columns: 1fr; }
+      .stats-inner { grid-template-columns: 1fr 1fr; }
+      .phone-card .phone-frame { width: 125px; }
+    }
+
+    /* ─── ANIMATIONS ──────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero-badge   { animation: fadeUp 0.5s ease both; }
+    .hero h1      { animation: fadeUp 0.5s 0.08s ease both; }
+    .hero-sub     { animation: fadeUp 0.5s 0.14s ease both; }
+    .hero p       { animation: fadeUp 0.5s 0.2s ease both; }
+    .hero-actions { animation: fadeUp 0.5s 0.26s ease both; }
+  </style>
+</head>
+<body>
+
+<!-- ─── NAV ─────────────────────────────────── -->
+<nav>
+  <a class="nav-logo" href="#">
+    <div class="nav-logo-fallback">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="1.5"/>
+        <circle cx="12" cy="9" r="2.5" fill="rgba(255,255,255,0.9)"/>
+        <path d="M9 8 Q12 5 15 8" stroke="rgba(255,255,255,0.6)" stroke-width="1" fill="none"/>
+      </svg>
+    </div>
+    <span class="nav-brand">Terestria<em>.</em></span>
+  </a>
+  <ul>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#screenshots">Screenshots</a></li>
+    <li><a href="#collaboration">Collaboration</a></li>
+    <li><a href="privacy.html">Privacy</a></li>
+    <li><a href="#access" class="btn-nav">Request Access</a></li>
+  </ul>
+</nav>
+
+<!-- ─── HERO ─────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      Agricultural &amp; Environmental Mapping
+    </div>
+    <h1>Map the Field<br/><span class="highlight">With Precision</span></h1>
+    <p class="hero-sub">// Mobile GIS · Offline-First · RTK Ready</p>
+    <p>Professional mobile mapping application for field geospatial data collection — point, line, polygon, photos, and attributes all in one platform.</p>
+    <div class="hero-actions">
+      <a href="#access" class="btn-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        Request Access
+      </a>
+      <a href="#screenshots" class="btn-outline">View Screenshots →</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="phone-hero-wrap">
+      <div class="phone hero-far">
+        <div class="phone-frame">
+          <img class="phone-screen" src="assets/login.jpg" alt="Terestria Login" />
+        </div>
+      </div>
+      <div class="phone hero-side">
+        <div class="phone-frame">
+          <img class="phone-screen" src="assets/menus.jpg" alt="Terestria Menu" />
+        </div>
+      </div>
+      <div class="phone hero-main">
+        <div class="phone-frame">
+          <img class="phone-screen" src="assets/collect.jpg" alt="Terestria Collect Data" />
+        </div>
+      </div>
+      <div class="phone hero-side">
+        <div class="phone-frame">
+          <img class="phone-screen" src="assets/gps.jpg" alt="Terestria GPS" />
+        </div>
+      </div>
+      <div class="phone hero-far">
+        <div class="phone-frame">
+          <img class="phone-screen" src="assets/fitur-release.jpg" alt="Terestria Features" />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── STATS ─────────────────────────────────── -->
+<div class="stats">
+  <div class="stats-inner">
+    <div class="stat">
+      <div class="stat-val">5</div>
+      <div class="stat-label">Spatial Data Types</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val">RTK</div>
+      <div class="stat-label">Geodetic GPS Ready</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val">100%</div>
+      <div class="stat-label">Offline Capable</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val">0</div>
+      <div class="stat-label">Ads &amp; Subscriptions</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── FEATURES OVERVIEW ─────────────────────── -->
+<section class="section features-section" id="features">
+  <div class="container">
+    <div class="features-header">
+      <div>
+        <div class="section-eyebrow">Core Features</div>
+        <h2 class="section-title">Everything a<br/><span class="accent">Field Survey Team</span> Needs</h2>
+      </div>
+      <p class="section-desc">Every feature is purpose-built for real field conditions — rough terrain, limited connectivity, and high-precision requirements.</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feat-card">
+        <div class="feat-num">01</div>
+        <div class="feat-icon-wrap">🗺️</div>
+        <div class="feat-title">Spatial Digitizing</div>
+        <p class="feat-desc">Create points, lines, and polygons directly on the map with real-time GPS coordinate accuracy in the field.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-num">02</div>
+        <div class="feat-icon-wrap">📋</div>
+        <div class="feat-title">Attribute Forms</div>
+        <p class="feat-desc">Dynamic forms that can be customized per layer and per project to match your survey requirements.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-num">03</div>
+        <div class="feat-icon-wrap">📸</div>
+        <div class="feat-title">Geotagged Photos</div>
+        <p class="feat-desc">Field photos automatically attach to map features with GPS coordinates and timestamp metadata.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-num">04</div>
+        <div class="feat-icon-wrap">🛰️</div>
+        <div class="feat-title">Custom Basemap</div>
+        <p class="feat-desc">Supports custom TMS and WMS sources. Tile caching for full offline operation without internet.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-num">05</div>
+        <div class="feat-icon-wrap">📡</div>
+        <div class="feat-title">Geodetic GPS</div>
+        <p class="feat-desc">Integrates with external RTK GPS receivers via TCP/IP (Emlid, etc.) for centimeter-level accuracy.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-num">06</div>
+        <div class="feat-icon-wrap">☁️</div>
+        <div class="feat-title">Manual Data Push</div>
+        <p class="feat-desc">Full control over when data is sent to the server. No automatic sync — you decide when to push.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── ALL SCREENSHOTS ───────────────────────── -->
+<section class="section screenshots-section" id="screenshots">
+  <div class="screenshots-header container">
+    <div class="section-eyebrow">App Preview</div>
+    <h2 class="section-title">Real <span class="accent">App</span> Screenshots</h2>
+    <p class="section-desc">Actual screenshots from Terestria running in the field.</p>
+  </div>
+
+  <div class="phones-row">
+    <div class="phone-card">
+      <div class="phone-frame">
+        <img class="phone-screen" src="assets/landing.jpg" alt="Splash Screen" />
+      </div>
+      <div class="phone-caption">
+        Splash Screen
+        <span>App launch screen</span>
+      </div>
+    </div>
+    <div class="phone-card">
+      <div class="phone-frame">
+        <img class="phone-screen" src="assets/login.jpg" alt="Sign In" />
+      </div>
+      <div class="phone-caption">
+        Sign In
+        <span>Credential-based login (v3.2)</span>
+      </div>
+    </div>
+    <div class="phone-card">
+      <div class="phone-frame">
+        <img class="phone-screen" src="assets/fitur-release.jpg" alt="Feature Release" />
+      </div>
+      <div class="phone-caption">
+        Release Notes
+        <span>v3.2-prod key features</span>
+      </div>
+    </div>
+    <div class="phone-card">
+      <div class="phone-frame">
+        <img class="phone-screen" src="assets/menus.jpg" alt="Main Menu" />
+      </div>
+      <div class="phone-caption">
+        Main Menu
+        <span>Projects, Layers, Basemaps</span>
+      </div>
+    </div>
+    <div class="phone-card">
+      <div class="phone-frame">
+        <img class="phone-screen" src="assets/projects.jpg" alt="Project Manager" />
+      </div>
+      <div class="phone-caption">
+        Project Manager
+        <span>Create &amp; manage survey projects</span>
+      </div>
+    </div>
+    <div class="phone-card">
+      <div class="phone-frame">
+        <img class="phone-screen" src="assets/collect.jpg" alt="Data Collection" />
+      </div>
+      <div class="phone-caption">
+        Data Collection
+        <span>Point digitizing on satellite map</span>
+      </div>
+    </div>
+    <div class="phone-card">
+      <div class="phone-frame">
+        <img class="phone-screen" src="assets/gps.jpg" alt="GPS Provider" />
+      </div>
+      <div class="phone-caption">
+        GPS Provider
+        <span>RTK connection via TCP/IP</span>
+      </div>
+    </div>
+    <div class="phone-card">
+      <div class="phone-frame">
+        <img class="phone-screen" src="assets/settings.jpg" alt="App Settings" />
+      </div>
+      <div class="phone-caption">
+        Settings
+        <span>Units, feature colors, appearance</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FEATURE DETAILS ──────────────────────── -->
+<section class="section feature-detail">
+  <div class="container">
+
+    <div class="feature-row">
+      <div class="feature-row-text">
+        <div class="section-eyebrow">Data Collection</div>
+        <h3>Digitize Directly on Satellite Imagery</h3>
+        <p>Terestria displays high-resolution satellite imagery as basemap. Add points, lines, and polygons precisely using a centered crosshair, with real-time GPS information and accuracy readout.</p>
+        <div class="feature-chips">
+          <span class="chip">Point</span>
+          <span class="chip">Line</span>
+          <span class="chip">Polygon</span>
+          <span class="chip">Add Point (Center)</span>
+          <span class="chip">Undo &amp; Clear</span>
+        </div>
+      </div>
+      <div class="feature-row-phone">
+        <div class="phone-frame">
+          <img class="phone-screen" src="assets/collect.jpg" alt="Data Collection" />
+        </div>
+      </div>
+    </div>
+
+    <div class="feature-row reverse">
+      <div class="feature-row-text">
+        <div class="section-eyebrow">Sign In &amp; Access Control</div>
+        <h3>Credential-Based Authentication</h3>
+        <p>Access to Terestria is granted through a manual credential request process. Each user signs in with a verified username and password issued by the app developer — ensuring the platform is used only by authorized survey teams.</p>
+        <div class="feature-chips">
+          <span class="chip">Username &amp; Password</span>
+          <span class="chip">Verified Credentials</span>
+          <span class="chip">No Self-Registration</span>
+          <span class="chip">v3.2-prod</span>
+        </div>
+      </div>
+      <div class="feature-row-phone">
+        <div class="phone-frame">
+          <img class="phone-screen" src="assets/login.jpg" alt="Sign In" />
+        </div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-row-text">
+        <div class="section-eyebrow">Professional GPS</div>
+        <h3>RTK Geodetic GPS Support</h3>
+        <p>Beyond the phone's built-in GPS, Terestria connects to RTK geodetic receivers (like Emlid Reach) via TCP/IP network. Achieve sub-centimeter position accuracy for high-precision survey requirements.</p>
+        <div class="feature-chips">
+          <span class="chip">Phone GPS</span>
+          <span class="chip">RTK GPS via TCP/IP</span>
+          <span class="chip">Emlid Reach</span>
+          <span class="chip">LLH Format</span>
+          <span class="chip">NMEA Stream</span>
+        </div>
+      </div>
+      <div class="feature-row-phone">
+        <div class="phone-frame">
+          <img class="phone-screen" src="assets/gps.jpg" alt="GPS Provider" />
+        </div>
+      </div>
+    </div>
+
+    <div class="feature-row reverse">
+      <div class="feature-row-text">
+        <div class="section-eyebrow">Project &amp; Layers</div>
+        <h3>Structured Project Management</h3>
+        <p>Organize every survey into separate projects. Create a new project from scratch, pull from the cloud, or import from a template. Each project has its own layer configuration, attribute forms, and basemap settings.</p>
+        <div class="feature-chips">
+          <span class="chip">Create New Project</span>
+          <span class="chip">Add from Cloud</span>
+          <span class="chip">Import Template</span>
+          <span class="chip">Layer Management</span>
+        </div>
+      </div>
+      <div class="feature-row-phone">
+        <div class="phone-frame">
+          <img class="phone-screen" src="assets/projects.jpg" alt="Project Manager" />
+        </div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-row-text">
+        <div class="section-eyebrow">What's New</div>
+        <h3>Release Notes &amp; Version Info</h3>
+        <p>Each app update comes with an in-app release dialog showing the version number and key features. Terestria v3.2-prod includes custom survey forms, point/line/polygon mapping, real-time GPS tracking, offline functionality, multiple basemap support, and data export capabilities.</p>
+        <div class="feature-chips">
+          <span class="chip">v3.2-prod</span>
+          <span class="chip">Custom Survey Forms</span>
+          <span class="chip">Offline Functionality</span>
+          <span class="chip">Data Export</span>
+        </div>
+      </div>
+      <div class="feature-row-phone">
+        <div class="phone-frame">
+          <img class="phone-screen" src="assets/fitur-release.jpg" alt="Feature Release" />
+        </div>
+      </div>
+    </div>
+
+    <div class="feature-row reverse">
+      <div class="feature-row-text">
+        <div class="section-eyebrow">Customization</div>
+        <h3>Display Settings &amp; Measurement Units</h3>
+        <p>Customize measurement units for area and distance, set individual colors for each feature type (point, line, polygon), and configure map appearance to match your team's field standards.</p>
+        <div class="feature-chips">
+          <span class="chip">Square Meters / Hectares</span>
+          <span class="chip">Point Color</span>
+          <span class="chip">Line Color</span>
+          <span class="chip">Polygon Color</span>
+          <span class="chip">Map Appearance</span>
+        </div>
+      </div>
+      <div class="feature-row-phone">
+        <div class="phone-frame">
+          <img class="phone-screen" src="assets/settings.jpg" alt="Settings" />
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── COLLABORATION ────────────────────────── -->
+<section class="section collab-section" id="collaboration">
+  <div class="container">
+    <div class="section-eyebrow">Team Collaboration</div>
+    <h2 class="section-title">Teamwork within<br/><span class="accent">One Ecosystem</span></h2>
+    <p class="section-desc">Create projects, invite team members, and coordinate field data collection in a structured, controlled environment.</p>
+
+    <div class="collab-grid">
+      <div class="collab-card featured">
+        <div class="collab-icon icon-green-bg">📁</div>
+        <h3>Project Management</h3>
+        <p>Each survey is organized into a project with its own layer configuration and attribute forms. Admins have full control over project settings and data.</p>
+      </div>
+      <div class="collab-card">
+        <div class="collab-icon icon-blue-bg">👥</div>
+        <h3>Team Access</h3>
+        <p>Add surveyors to a project. Each team member can access, collect, and upload data according to the role assigned by the project admin.</p>
+      </div>
+      <div class="collab-card">
+        <div class="collab-icon icon-orange-bg">📶</div>
+        <h3>Offline First</h3>
+        <p>The entire data collection workflow runs without an internet connection. All data is stored locally on the device and can be synced when connectivity is available.</p>
+      </div>
+      <div class="collab-card">
+        <div class="collab-icon icon-purple-bg">☁️</div>
+        <h3>Manual Data Push</h3>
+        <p>No automatic sync. Users have full control over when and which data is sent to the server — aligned with your field workflow.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CREDENTIAL ───────────────────────────── -->
+<section class="section credential-section" id="access">
+  <div class="container">
+    <div class="credential-inner">
+      <div class="credential-text">
+        <div class="section-eyebrow">App Access</div>
+        <h2 class="section-title">Access Through<br/>Direct Request</h2>
+        <p class="section-desc">Terestria is a purpose-built application with no ads and no subscriptions. Every user is verified directly by the developer.</p>
+
+        <div class="credential-reasons">
+          <div class="reason-item">
+            <div class="reason-icon">🚫</div>
+            <div>
+              <strong>No Advertisements</strong>
+              Full focus on field work — zero distractions.
+            </div>
+          </div>
+          <div class="reason-item">
+            <div class="reason-icon">💳</div>
+            <div>
+              <strong>No Subscription Fees</strong>
+              Access is granted based on need and direct agreement.
+            </div>
+          </div>
+          <div class="reason-item">
+            <div class="reason-icon">🛠️</div>
+            <div>
+              <strong>Direct Developer Support</strong>
+              Registered users receive technical support and app updates directly.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="credential-card">
+        <h3>Submit an Access Request</h3>
+        <p>Contact the app developer with the following information for the verification process:</p>
+
+        <div class="info-block">
+          <div class="info-line">
+            <span class="info-line-dot"></span>
+            Organization / institution name
+          </div>
+          <div class="info-line">
+            <span class="info-line-dot"></span>
+            Survey type and requirements
+          </div>
+          <div class="info-line">
+            <span class="info-line-dot"></span>
+            Estimated number of users
+          </div>
+          <div class="info-line">
+            <span class="info-line-dot"></span>
+            Field operation area / location
+          </div>
+          <div class="info-line">
+            <span class="info-line-dot"></span>
+            Contact person details
+          </div>
+        </div>
+
+        <a href="mailto:a.sandi.rizqi@gmail.com" class="btn-full">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Send Access Request
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ───────────────────────────────── -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">Terestria<em>.</em></div>
+      <div class="footer-sub">Agricultural &amp; Environmental Mapping © 2025</div>
+    </div>
+    <div class="footer-links">
+      <a href="#features">Features</a>
+      <a href="#screenshots">Screenshots</a>
+      <a href="#collaboration">Collaboration</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="#access">Request Access</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
